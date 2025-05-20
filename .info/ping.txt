@@ -1,0 +1,39 @@
+
+[+]   ¿Cómo funciona un escaneo ICMP?					(PULSA LA TECLA "Q" PARA SALIR) 
+
+Un escaneo ICMP (Internet Control Message Protocol) es una técnica utilizada para determinar si un
+host o dispositivo en la red está activo o accesible. Este tipo de escaneo se basa en el envío de
+paquetes **ICMP Echo Request** (comúnmente conocidos como "ping") a una dirección IP específica,
+y espera recibir un **ICMP Echo Reply** como respuesta.
+
+[+]    Funcionamiento paso a paso:
+
+1. Envío del paquete: El script envía un paquete ICMP Echo Request a la dirección IP objetivo.
+
+2. Respuesta del destino: Si el sistema objetivo está activo y permite responder a las solicitudes 
+ICMP,devolverá un paquete ICMP Echo Reply.
+
+3. Detección del estado: El script analiza si se recibe una respuesta. Si la recibe, se considera
+que el host está *activo/en línea. Si no hay respuesta tras un tiempo definido (timeout), se asume
+que el host está *inactivo/fuera de línea* o que su firewall bloquea las peticiones ICMP.
+
+4. Iteración: En el caso de escanear una red completa, el script repite este proceso para cada 
+dirección IP dentro del rango especificado.
+
+[+] 	Usos comunes:
+
+- Detectar hosts activos en una red local.
+
+- Verificar conectividad básica entre dispositivos.
+
+- Diagnóstico rápido de problemas de red.
+
+[+]		 Notas importantes:
+
+- Algunos dispositivos pueden estar configurados para ignorar las solicitudes ICMP
+(por motivos de seguridad), por lo que la falta de respuesta no siempre implica que el host
+esté caído.
+
+- Este tipo de escaneo requiere permisos de red básicos, y en algunos casos privilegios elevados
+(como `root`) dependiendo de la implementación.
+

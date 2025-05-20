@@ -1,0 +1,36 @@
+¿Qué es un escaneo ARP?								(PULSA LA TECLA "Q" PARA SALIR) 
+
+
+Un escaneo ARP es una técnica que permite descubrir qué dispositivos están activos en una red local
+mediante el envío de solicitudes ARP a un rango de direcciones IP. Cuando un dispositivo responde,
+se obtiene su dirección MAC, lo que confirma que esa IP está en uso.
+
+
+   [+]  Funcionamiento del Escaneo ARP con arp-scan
+
+Este script utiliza la herramienta arp-scan para realizar un escaneo de la red local y 
+detectar dispositivos activos. arp-scan envía solicitudes ARP a todas las direcciones IP dentro
+del rango especificado (generalmente el segmento de red local) y espera respuestas de los
+dispositivos conectados.
+
+ [+]   ¿Cómo funciona paso a paso?
+
+
+1. Envío de paquetes ARP: El programa envía una solicitud ARP por cada dirección IP del rango 
+definido.
+
+2. Respuesta de dispositivos: Los dispositivos que están activos y responden a la solicitud ARP
+devuelven su dirección MAC.
+
+3. Detección de hosts vivos: A partir de las respuestas recibidas, el script identifica qué IPs
+están en uso y obtiene información adicional como la dirección MAC y el fabricante asociado.
+
+
+  [+]    Ventajas de usar arp-scan:
+- Detecta hosts incluso si tienen bloqueado ICMP (ping).
+- Muestra información detallada sobre cada dispositivo (dirección MAC, vendedor, etc.).
+- Es rápido y eficaz en redes locales.
+
+
+⚠️  Nota: Se requieren permisos de superusuario sudo para ejecutar `arp-scan
+ya que trabaja directamente con paquetes de bajo nivel.

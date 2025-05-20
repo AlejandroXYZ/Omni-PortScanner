@@ -1,0 +1,143 @@
+[+]  ¿Qué es UDP?
+
+UDP es un protocolo de transporte que forma parte de la suite de protocolos TCP/IP.
+Su principal característica es que no establece conexiones , no garantiza entrega, ni orden,
+ni integridad. Esto lo hace muy rápido y ligero comparado con TCP.
+
+UDP = "enviar y olvidar"
+
+Se suele decir que UDP es como enviar una carta sin acuse de recibo: envías los datos y confías
+en que lleguen, pero no hay confirmación de recepción.
+
+
+[+]	Estructura del Encabezado UDP
+
+El encabezado UDP tiene solo 8 bytes de longitud e incluye:
+
+Campo				Tamaño bits			Descripción
+
+Puerto Origen			2				Puerto del emisor (opcional)
+
+Puerto Destino			2				Puerto del receptor
+
+Longitud			2				Longitud total del datagrama (cabecera + datos)
+
+Suma de verificación		2		Verifica errores (opcional en IPv4, obligatorio en IPv6)
+(checksum)	
+
+✅ Muy simple comparado con TCP, que tiene opciones, secuencias, ventanas, etc. 
+
+
+
+[+] Cómo funciona UDP por detrás
+
+1. Sin conexión
+No hay handshake (como SYN, SYN-ACK, ACK como en TCP).
+El cliente puede enviar datos al servidor inmediatamente.
+
+2. Sin control de flujo o congestión
+No espera confirmaciones (ACKs), ni ajusta velocidad según la red.
+Enviará paquetes incluso si la red está congestionada.
+
+3. Sin retransmisión
+Si un paquete se pierde, no se reintenta .
+Es responsabilidad de la aplicación (si quiere garantizar entrega).
+
+4. Datagramas independientes
+Cada paquete UDP se procesa de forma independiente.
+No hay estado compartido entre paquetes.
+
+[+] Ventajas de UDP
+
+• Bajo overhead
+
+• Menos bytes para cabeceras → más eficiente
+
+• Sin latencia adicional
+
+• No espera confirmaciones ni handshake
+
+• Ideal para tiempo real
+
+• Video streaming, VoIP, juegos online, etc.
+
+• Escalable
+
+• Puede manejar multicast y broadcast fácilmente
+
+
+
+⚠️ Desventajas de UDP
+
+•	Sin garantía de entrega
+
+•	Paquetes pueden perderse sin aviso
+
+•	Sin ordenamiento
+
+•	Los paquetes pueden llegar desordenados
+
+•	Sin control de congestión
+
+•	Puede saturar redes si no se controla
+
+•	No confiable para transferir archivos importantes
+
+•	Puede faltar información
+
+
+
+Ejemplos reales de uso de UDP
+
+VENTAJA						PUERTO			USO
+
+DNS (resolución de nombres)			53/UDP		Rápido y eficiente para pequeñas
+															 consultas     
+DHCP (asignación de IPs)			67/68		Comunicación rápida entre cliente y 
+															servidor.
+
+SNMP (gestión de red)				161/162		Monitoreo ligero de dispositivos
+
+Streaming multimedia					-			Menor latencia que TCP
+
+Juegos multijugador online				-			Reducción de lag
+
+NTP (sincronización de hora)			123/UDP		Permite sincronización precisa
+
+
+[+] ¿Por qué es difícil escanear puertos UDP?
+
+Como ya sabrás, hacer un escaneo UDP con nmap es distinto a TCP porque:
+
+SITUACIÓN						¿CÓMO RESPONDE UDP?
+
+Puerto abierto					Algunos servicios responden (ej: DNS, NTP, SNMP)
+
+Puerto cerrado					Respuesta ICMP "Port Unreachable" (si no hay firewall)
+
+Puerto filtrado					Nada. Ni respuesta, ni error. Solo silencio.
+
+
+Esto hace que muchos puertos aparezcan como open|filtered o filtered.
+
+[+]  Comparativa UDP vs TCP
+
+CARACTERÍSTICA			UDP						TCP
+
+Tipo				Sin conexión			Orientado a conexión
+Entrega				No garantizada			Garantizada
+Ordenamiento			No					Sí
+Control de congestión		No					Sí
+Velocidad			Más rápida				Más lenta
+Uso típico			Streaming, juegos, DNS		Web, correo, transferencias
+Overhead			Bajo (8 bytes)			Alto (20+ bytes)
+Retransmisión			No					Sí
+
+
+[+]  Conclusión
+UDP es ideal cuando la velocidad y eficiencia son más importantes que la fiabilidad .
+Funciona "por detrás" sin conexiones ni controles complejos.
+Es usado ampliamente en aplicaciones donde un pequeño porcentaje de pérdida de paquetes 
+s aceptable.
+A nivel de escaneo, requiere interpretación cuidadosa , ya que la falta de respuesta no
+significa necesariamente "puerto abierto" .

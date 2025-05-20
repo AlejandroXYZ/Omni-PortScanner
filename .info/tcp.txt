@@ -1,0 +1,188 @@
+[+]	¿Qué es TCP?
+
+
+TCP (Transmission Control Protocol ) es un protocolo de transporte orientado a conexión que garantiza
+la entrega confiable de datos entre dos dispositivos en una red. Se usa ampliamente para
+aplicaciones como navegación web (HTTP), correo electrónico (SMTP), transferencia de archivos (FTP),
+etc.
+
+[+]	 Características principales de TCP
+
+Orientado a conexión : Antes de enviar datos, se establece una conexión entre cliente y servidor.
+
+Confiable : Usa acuses de recibo (ACK) y retransmisiones para asegurar que los datos lleguen completos
+y sin errores.
+
+Ordenado : Los paquetes recibidos se reensamblan en el orden correcto.
+
+Control de flujo : Evita que un emisor rápido sature a un receptor lento.
+
+Control de congestión : Ayuda a evitar la saturación de la red.
+
+
+[+] Establecimiento de una conexión: El "Three-way handshake"
+
+
+La conexión TCP comienza con un proceso llamado three-way handshake (apretón de manos de tres vías). Supongamos que un cliente quiere conectarse a un servidor :
+
+		Paso 1: SYN (Synchronize)
+		El cliente envía un paquete SYN = 1 , con un número de secuencia inicial aleatorio
+		(ISN - Initial Sequence Number).
+
+
+		1
+		Cliente → Servidor: SYN=1, seq=x
+
+		
+
+		Paso 2: SYN-ACK (Synchronize-Acknowledge)
+		El servidor responde con un paquete SYN = 1 y ACK = 1 ,
+		reconociendo el número de secuencia del cliente (x+1) y enviando su propio ISN (y).
+
+
+		1
+		Servidor → Cliente: SYN=1, ACK=1, seq=y, ack=x+1
+
+
+
+		Paso 3: ACK (Acknowledge)
+		El cliente responde con un paquete ACK = 1 , reconociendo el número de secuencia del
+		servidor (y+1).
+
+
+		1
+		Cliente → Servidor: ACK=1, ack=y+1
+		A partir de este momento, la conexión está establecida y ambos pueden comenzar a
+		intercambiar datos.
+
+
+
+		[+]  Transferencia de datos
+		Una vez establecida la conexión:
+
+		Los datos se dividen en segmentos.
+		Cada segmento tiene:
+		
+		•	Un número de secuencia (sequence number)
+		•	Un acuse de recibo (acknowledgment number)
+		•	Ventana de recepción (window size) para control de flujo
+		•	Cuando un lado recibe un segmento, responde con un ACK confirmando que lo recibió.
+			Si no llega el ACK en cierto tiempo, el remitente retransmite el segmento.
+
+
+[+]	Cierre de la conexión: "Four-way handshake"
+TCP permite cerrar la conexión de forma controlada. Puede hacerse de manera simétrica o asimétrica
+pero comúnmente se usa un proceso de 4 pasos :
+
+		Paso 1: FIN del cliente
+		El cliente envía un paquete FIN = 1 indicando que ya no enviará más datos.
+
+
+		1
+		Cliente → Servidor: FIN=1, seq=u
+
+
+
+		Paso 2: ACK del servidor
+		El servidor responde con un ACK al FIN del cliente.
+
+
+		1
+		Servidor → Cliente: ACK=1, ack=u+1
+
+		
+		Paso 3: FIN del servidor
+		El servidor también envía un FIN = 1 cuando termina de enviar sus datos.
+
+
+		1
+		Servidor → Cliente: FIN=1, seq=v
+
+
+		Paso 4: ACK del cliente
+		El cliente responde con un ACK al FIN del servidor.
+
+		1
+		Cliente → Servidor: ACK=1, ack=v+1
+
+		Después de esto, la conexión se cierra completamente.
+
+Nota: En algunos casos, uno de los lados puede seguir enviando datos después de recibir el FIN,
+por eso el cierre es bidireccional. 
+
+
+[+]  Encabezado TCP (TCP Header)
+
+
+El encabezado TCP contiene información clave:
+
+=============================================================
+CAMPO					DESCRIPCIÓN
+=============================================================
+Puerto Origen			Puerto del emisor
+Puerto Destino			Puerto del receptor
+Número de secuencia		Número de secuencia del primer byte del segmento
+Número de acuse			Número de secuencia del siguiente byte esperado
+Tamaño de ventana		Cuántos bytes puede recibir el receptor
+Flags				Bits de control: SYN, ACK, FIN, RST, PSH, URG
+Checksum			Para verificar integridad del segmento
+==============================================================
+
+
+[+] Resumen Visual
+
+[Cliente]                   [Servidor]
+   |                            |
+   |-------- SYN (seq=x) ------>|
+   |<------- SYN-ACK (seq=y, ack=x+1) --|
+   |-------- ACK (ack=y+1) ---->|
+   |         Conexión establecida        |
+   |<------ Datos + ACKs ------->|
+   |--------- FIN (seq=u) ------>|
+   |<-------- ACK (ack=u+1) -----|
+   |<-------- FIN (seq=v) -------|
+   |--------- ACK (ack=v+1) ------>|
+   |           Conexión cerrada          |
+
+
+[+] Qué sucede Durante el Escaneo:
+
+
+Este script utiliza la herramienta "nc" para realizar el escaneo de puertos, utilizando el 
+siguiente comando:
+
+sudo nc -zv <IP_VICTIMA>
+
+-z: Indica que Netcat debe hacer solo un escaneo (no enviar datos).
+-v: Modo verboso (muestra información detallada).
+
+[+]  ¿Qué sucede "por detrás"?
+
+Cuando ejecutas este comando, Netcat hace lo siguiente por debajo del nivel de aplicación:
+
+1. Resolución DNS (si es necesario)
+Si el destino es un nombre de dominio (ejemplo.com), Netcat usa la función gethostbyname() o
+equivalentes para resolver la IP.
+
+2. Creación del socket TCP
+Netcat llama a la función socket() del sistema para crear un socket de tipo SOCK_STREAM ,
+que corresponde al protocolo TCP.
+
+3. Intento de conexión con connect()
+Para cada puerto especificado, Netcat llama a connect() en el socket creado, apuntando a la IP y
+puerto objetivo.
+Esta llamada inicia el handshake de TCP (SYN → SYN-ACK → ACK) :
+Tu máquina envía un paquete SYN .
+El servidor responde con SYN-ACK (si el puerto está abierto).
+Netcat cierra la conexión con un RST o termina el handshake si continúa la comunicación.
+
+
+4. Detección del estado del puerto
+Si connect() devuelve éxito (sin error), Netcat concluye que el puerto está abierto .
+Si devuelve un error como Connection refused, el puerto está cerrado .
+Si hay timeout o no hay respuesta, el puerto puede estar filtrado o cerrado pero sin respuesta.
+
+
+5. Cierre rápido de la conexión
+Dado que usaste -z, Netcat cierra la conexión inmediatamente después de confirmar si el puerto está 
+abierto.
