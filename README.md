@@ -1,5 +1,8 @@
 🧠  # Omni-PortScanner – Escáner de Puertos Educativo sin Nmap
 
+
+![Captura](./screen.jpg)
+
 🔍 Omni-PortScanner es un escáner de puertos hecho en Bash que permite analizar dispositivos 
 conectados a la red local y sus puertos abiertos utilizando diferentes técnicas de escaneo.
 
@@ -58,6 +61,10 @@ Puedes explorar también información sobre protocolos y tipos de escaneo
 ARP, ICMP(ping), UDP, TCP
 
 
+![captura2](./screen2.jpg)
+
+
+
 📁 Estructura del Proyecto
 
 Omni-PortScanner/
@@ -95,7 +102,11 @@ Si tienes ideas para añadir más tipos de escaneo, mejorar la interfaz o agrega
 👤 ## Autor
 👤 Alejandro Moncada
 
-🔗 GitHub: AlejandroXYZ
+#### GitHub: AlejandroXYZ
+
+#### Correo: [Mi_correo](emailto:alejandromdekuedit@gmail.com)
+
+#### Linkedin: [Mi_perfil](https://www.linkedin.com/in/alejandroxyz/)
 
 🌟 ¡Gracias por usar Omni-PortScanner !
 Esperamos que te sirva para aprender y experimentar con redes de forma segura y ética.

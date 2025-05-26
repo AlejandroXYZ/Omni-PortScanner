@@ -4,7 +4,7 @@
 
 
 # Variables
-hilos=500
+hilos=500 # Número máximo de procesos de escaneo en segundo plano.
 dir_router=$(route -n | head -n 3 | awk '{ print $2 }' | tail -n 1| cut -d. -f1-3)
 direccion=$(for i in $(seq 1 256); do
     		echo "$dir_router"\.$i 
@@ -220,8 +220,8 @@ seleccionar_escaneo(){
 	banner
 	echo -e "=====================Tipo de Escaneo a Red =================================\n"
 	echo -e "Primer escaneo para verificar que dispositivos están conectados a la red\n\n"
-	echo -e "1) ARP ( (Address Resolution Protocol scan )  ( Mas silecioso ) \n"
-	echo -e "2) PING ( ICMP ) 	  			( Mas Ruidoso )\n"
+	echo -e "1) ARP ( (Address Resolution Protocol scan )  ( LAN, Rápido y Silecioso ) \n"
+	echo -e "2) PING ( ICMP ) - LAN WAN, puede ser bloqueado por firewalls 	  			( Mas Ruidoso )\n"
 	echo -e "3) Listar Protocolos y Escaneos\n"
 	echo -e "4) Salir\n" 
 	read -p "Qué tipo de escaneo deseas realizar:   " tipo_escaner
