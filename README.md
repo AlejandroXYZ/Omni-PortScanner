@@ -1,4 +1,4 @@
-🧠  # Omni-PortScanner – Escáner de Puertos Educativo sin Nmap
+# 🧠Omni-PortScanner – Escáner de Puertos Educativo sin Nmap
 
 
 ![Captura](./screen.jpg)
